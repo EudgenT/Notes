@@ -12,4 +12,21 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="DefaultTextViewStyle">
+        <item name="android:layout_margin">@dimen/view_notes_item_margin</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="PrimaryTextViewStyle" parent="DefaultTextViewStyle">
+        <item name="android:textSize">@dimen/view_notes_item_primary_text_size</item>
+        <item name="android:textColor">@android:color/primary_text_light</item>
+    </style>
+
+    <style name="SecondaryTextViewStyle" parent="DefaultTextViewStyle">
+        <item name="android:textSize">@dimen/view_notes_item_secondary_text_size</item>
+        <item name="android:textColor">@android:color/secondary_text_light</item>
+    </style>
 </resources>

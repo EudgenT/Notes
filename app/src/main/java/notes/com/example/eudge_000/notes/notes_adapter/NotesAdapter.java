@@ -11,15 +11,16 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import notes.com.example.eudge_000.notes.R;
+import notes.com.example.eudge_000.notes.model.Note;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.Notes_View_Holder> {
 
-    public void setDataSource(List<String> dataSource) {
-        this.dataSource = dataSource;
+    private List<Note> mDataSource = null;
+
+    public void setDataSource(List<Note> mDataSource) {
+        this.mDataSource = mDataSource;
         notifyDataSetChanged();
     }
-
-    private List<String> dataSource = null;
 
     @Override
     public Notes_View_Holder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -30,23 +31,27 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.Notes_View_H
 
     @Override
     public void onBindViewHolder(Notes_View_Holder holder, int position) {
-        String title = dataSource.get(position);
-        holder.bindView(title);
+        Note note = mDataSource.get(position);
+        holder.bindView(note);
     }
 
     @Override
     public int getItemCount() {
-        if (dataSource == null)
-            return 0;
-        return dataSource.size();
+        return mDataSource == null ? 0:mDataSource.size();
     }
 
     static class Notes_View_Holder extends RecyclerView.ViewHolder {
-        @BindView(R.id.title_text_view)
-        protected TextView titleTextView;
+        @BindView(R.id.primary_text_view)
+        protected TextView mPrimaryTextView;
+        @BindView(R.id.secondary_text_view)
+        protected TextView mSecondaryTextView;
+        @BindView(R.id.date_text_view)
+        protected TextView mDateTextView;
 
-        void bindView(String title) {
-            titleTextView.setText(title);
+        void bindView(Note note) {
+            mPrimaryTextView.setText(note.getTitle());
+            mSecondaryTextView.setText(note.getText());
+            mDateTextView.setText(String.valueOf(note.getTime()));
         }
 
         public Notes_View_Holder(View itemView) {

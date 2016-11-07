@@ -15,6 +15,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import notes.com.example.eudge_000.notes.model.Note;
 import notes.com.example.eudge_000.notes.notes_adapter.NotesAdapter;
 
 public class NotesActivity extends AppCompatActivity {
@@ -34,9 +35,13 @@ public class NotesActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         NotesAdapter adapter = new NotesAdapter();
-        List<String> dataSource = new ArrayList<>();
+        List<Note> dataSource = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
-            dataSource.add("title: " + i);
+            Note note = new Note();
+            note.setTitle("title: "+i);
+            note.setText("text: "+i);
+            note.setTime(System.currentTimeMillis());
+            dataSource.add(note);
         }
         recyclerView.setAdapter(adapter);
         adapter.setDataSource(dataSource);
