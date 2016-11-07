@@ -1,8 +1,8 @@
 package notes.com.example.eudge_000.notes;
 
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,25 +13,28 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import notes.com.example.eudge_000.notes.notes_adapter.NotesAdapter;
 
 public class NotesActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView = null;
-    private Toolbar toolbar = null;
+    @BindView(R.id.recycler_view)
+    protected RecyclerView recyclerView;
+    @BindView(R.id.toolbar)
+    protected Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         setTitle(R.string.app_name);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         NotesAdapter adapter = new NotesAdapter();
-        List<String> dataSource = new ArrayList<String>();
+        List<String> dataSource = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             dataSource.add("title: " + i);
         }

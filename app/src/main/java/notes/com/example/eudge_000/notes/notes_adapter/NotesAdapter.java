@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import notes.com.example.eudge_000.notes.R;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.Notes_View_Holder> {
@@ -40,8 +42,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.Notes_View_H
     }
 
     static class Notes_View_Holder extends RecyclerView.ViewHolder {
-
-        private TextView titleTextView = null;
+        @BindView(R.id.title_text_view)
+        protected TextView titleTextView;
 
         void bindView(String title) {
             titleTextView.setText(title);
@@ -49,7 +51,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.Notes_View_H
 
         public Notes_View_Holder(View itemView) {
             super(itemView);
-            titleTextView = (TextView) itemView.findViewById(R.id.title_text_view);
+            ButterKnife.bind(this,itemView);
         }
     }
 }
