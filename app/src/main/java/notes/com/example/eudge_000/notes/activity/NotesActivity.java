@@ -87,7 +87,6 @@ public class NotesActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
         return super.onPrepareOptionsMenu(menu);
     }
 }

@@ -3,10 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_create"
+        android:icon="@drawable/ic_check"
+        android:title="@string/create"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share_variant"
+        android:title="@string/share"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_settings"
-        android:title="@string/settings"
-        app:showAsAction="ifRoom" />
+        android:title="@string/settings"/>
     <item
         android:id="@+id/action_help"
         android:icon="@mipmap/ic_launcher"
