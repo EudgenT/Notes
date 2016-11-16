@@ -1,5 +1,6 @@
 package notes.com.example.eudge_000.notes.activity;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import notes.com.example.eudge_000.notes.R;
+import notes.com.example.eudge_000.notes.db.NotesContract;
 
 public class EditNoteActivity extends AppCompatActivity {
 
@@ -29,15 +31,13 @@ public class EditNoteActivity extends AppCompatActivity {
     }
 
     private static final String SHARE_TYPE = "text/*";
-    public static final String DATA_KEY = "DATA_KEY";
+    public static final String RESULT = "RESULT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_note);
         ButterKnife.bind(this);
-//        String extraSting = getIntent().getStringExtra(DATA_KEY);
-//        Toast.makeText(this, extraSting, Toast.LENGTH_SHORT).show();
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Create note");
@@ -66,8 +66,7 @@ public class EditNoteActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: {
-//                finish();
-                Intent intent = new Intent(this,NotesActivity.class);
+                Intent intent = new Intent(this, NotesActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;
@@ -76,19 +75,32 @@ public class EditNoteActivity extends AppCompatActivity {
                 share();
                 break;
             }
-            case R.id.action_create:{
-                Toast.makeText(this, "Create notes", Toast.LENGTH_SHORT).show();
-                return true;
+            case R.id.action_create: {
+                onSaveBtnClick();
+                break;
             }
             case R.id.action_settings: {
                 Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
                 return true;
             }
-            case R.id.action_help:{
+            case R.id.action_help: {
                 Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show();
                 return true;
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onSaveBtnClick() {
+        insertNote();
+        finish();
+    }
+
+    private void insertNote() {
+        ContentValues values = new ContentValues();
+        values.put(NotesContract.TITLE_COLUMN, mTitleTextView.getText().toString());
+        values.put(NotesContract.TEXT_COLUMN, mContentTextView.getText().toString());
+        values.put(NotesContract.TIME_COLUMN, String.valueOf(System.currentTimeMillis()));
+        getContentResolver().insert(NotesContract.CONTENT_URI, values);
     }
 }

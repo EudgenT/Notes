@@ -14,9 +14,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.EditNoteActivity">
+        <activity android:name=".activity.EditNoteActivity" />
 
-        </activity>
+        <provider
+            android:name=".providers.NotesContentProvider"
+            android:authorities="notes.com.example.eudge_000.notes"
+            android:exported="false" />
     </application>
 
 </manifest>
