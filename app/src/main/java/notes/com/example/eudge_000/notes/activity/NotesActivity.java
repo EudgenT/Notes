@@ -1,6 +1,5 @@
 package notes.com.example.eudge_000.notes.activity;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -27,8 +25,9 @@ import notes.com.example.eudge_000.notes.R;
 import notes.com.example.eudge_000.notes.db.NotesContract;
 import notes.com.example.eudge_000.notes.model.Note;
 import notes.com.example.eudge_000.notes.notes_adapter.NotesAdapter;
+import notes.com.example.eudge_000.notes.notes_adapter.NotesAdapter.Notes_View_Holder;
 
-public class NotesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class NotesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
     @BindView(R.id.recycler_view)
     protected RecyclerView mRecyclerView;
@@ -51,14 +50,18 @@ public class NotesActivity extends AppCompatActivity implements LoaderManager.Lo
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)  {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.notes_menu, menu);
-        return true;
+        getMenuInflater().inflate(R.menu.notes_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @OnClick(R.id.fab_button)
     public void onFabBtnClick() {
         startActivity(EditNoteActivity.newInstance(this));
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -74,11 +77,6 @@ public class NotesActivity extends AppCompatActivity implements LoaderManager.Lo
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -101,10 +99,18 @@ public class NotesActivity extends AppCompatActivity implements LoaderManager.Lo
         NotesAdapter adapter = new NotesAdapter();
         mRecyclerView.setAdapter(adapter);
         adapter.setDataSource(dataSource);
+        adapter.setOnItemClickListener(this);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        Notes_View_Holder holder = (Notes_View_Holder) mRecyclerView.findContainingViewHolder(view);
+        if(holder == null) return;
+        startActivity(EditNoteActivity.newInstance(this, holder.getNote().getId()));
     }
 }

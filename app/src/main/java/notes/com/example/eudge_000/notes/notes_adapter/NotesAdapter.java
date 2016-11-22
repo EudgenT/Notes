@@ -17,6 +17,16 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.Notes_View_H
 
     private List<Note> mDataSource = null;
 
+    private View.OnClickListener mOnItemClickListener = null;
+
+    public View.OnClickListener getOnItemClickListener() {
+        return mOnItemClickListener;
+    }
+
+    public void setOnItemClickListener(View.OnClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
+    }
+
     public void setDataSource(List<Note> mDataSource) {
         this.mDataSource = mDataSource;
         notifyDataSetChanged();
@@ -33,6 +43,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.Notes_View_H
     public void onBindViewHolder(Notes_View_Holder holder, int position) {
         Note note = mDataSource.get(position);
         holder.bindView(note);
+        holder.itemView.setOnClickListener(mOnItemClickListener);
     }
 
     @Override
@@ -40,7 +51,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.Notes_View_H
         return mDataSource == null ? 0:mDataSource.size();
     }
 
-    static class Notes_View_Holder extends RecyclerView.ViewHolder {
+    public static class Notes_View_Holder extends RecyclerView.ViewHolder {
+
+        private Note mNote;
+
         @BindView(R.id.primary_text_view)
         protected TextView mPrimaryTextView;
         @BindView(R.id.secondary_text_view)
@@ -49,6 +63,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.Notes_View_H
         protected TextView mDateTextView;
 
         void bindView(Note note) {
+            mNote = note;
             mPrimaryTextView.setText(note.getTitle());
             mSecondaryTextView.setText(note.getText());
             mDateTextView.setText(String.valueOf(note.getTime()));
@@ -57,6 +72,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.Notes_View_H
         public Notes_View_Holder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+        }
+
+        public Note getNote() {
+            return mNote;
         }
     }
 }

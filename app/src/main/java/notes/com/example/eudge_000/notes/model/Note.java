@@ -2,9 +2,12 @@ package notes.com.example.eudge_000.notes.model;
 
 import android.database.Cursor;
 
+import com.tjeannin.provigen.ProviGenBaseContract;
+
 import notes.com.example.eudge_000.notes.db.NotesContract;
 
 public class Note {
+    private long mId;
     private String mTitle = null;
     private String mText = null;
     private String mTime = null;
@@ -12,6 +15,7 @@ public class Note {
     public Note() {}
 
     public Note(Cursor data) {
+        mId = data.getLong(data.getColumnIndex(ProviGenBaseContract._ID));
         mTitle = data.getString(data.getColumnIndex(NotesContract.TITLE_COLUMN));
         mText = data.getString(data.getColumnIndex(NotesContract.TEXT_COLUMN));
         mTime = data.getString(data.getColumnIndex(NotesContract.TIME_COLUMN));
@@ -39,5 +43,9 @@ public class Note {
 
     public void setTime(String mTime) {
         this.mTime = mTime;
+    }
+
+    public long getId() {
+        return mId;
     }
 }
