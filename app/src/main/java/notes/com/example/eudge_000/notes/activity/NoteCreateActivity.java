@@ -1,12 +1,8 @@
 package notes.com.example.eudge_000.notes.activity;
 
-import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -19,73 +15,40 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.tjeannin.provigen.ProviGenBaseContract;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import notes.com.example.eudge_000.notes.R;
 import notes.com.example.eudge_000.notes.db.NotesContract;
-import notes.com.example.eudge_000.notes.model.Note;
 import notes.com.example.eudge_000.notes.notes_adapter.NotesFragmentPagerAdapter;
 import notes.com.example.eudge_000.notes.util.DateUtil;
 
-public class EditNoteActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class NoteCreateActivity extends AppCompatActivity {
 
     private String mOriginalTitle = "";
     private String mOriginalText = "";
+    private long mId = -1;
+    private static final String SHARE_TYPE = "text/*";
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
-    @BindView(R.id.view_pager)
-    protected ViewPager mViewPager;
     @BindView(R.id.title_text_view)
     public TextView mTitleTextView;
     @BindView(R.id.edit_note_text_view)
     public TextView mContentTextView;
 
-    private long mId = -1;
-    private NotesFragmentPagerAdapter mViewPagerAdapter = null;
-
-    private static final String SHARE_TYPE = "text/*";
-
     @NonNull
     public static Intent newInstance(@NonNull Context context) {
-        return new Intent(context, EditNoteActivity.class);
-    }
-
-    @NonNull
-    public static Intent newInstance(@NonNull Context context, long id) {
-        Intent intent = newInstance(context);
-        intent.putExtra(ProviGenBaseContract._ID, id);
-        return intent;
+        return new Intent(context, NoteCreateActivity.class);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_note);
+        setContentView(R.layout.activity_note_create);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        checkIntentByExtraId();
-
-        mViewPagerAdapter = new NotesFragmentPagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(mViewPagerAdapter);
-    }
-
-    private void checkIntentByExtraId() {
-        Intent intent = getIntent();
-        if (!intent.hasExtra(ProviGenBaseContract._ID)) {
-            return;
-        }
-        mId = intent.getLongExtra(ProviGenBaseContract._ID, mId);
-        if (mId == -1) {
-            return;
-        }
-        getLoaderManager().initLoader(R.id.edit_note_loader, null, this);
+        setTitle("Create note");
     }
 
     @Override
@@ -138,7 +101,7 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
     }
 
     private void deleteNote() {
-        if (isNoteUpdatable()) {
+        if(isNoteUpdatable()){
             getContentResolver().delete(
                     Uri.withAppendedPath(NotesContract.CONTENT_URI, String.valueOf(mId)),
                     null,
@@ -161,48 +124,11 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
     }
 
     private void save() {
-        if (isNoteUpdatable()) {
-            updateNote();
-        } else {
+        if(isNoteUpdatable()){
+            return;
+        } else{
             insertNote();
         }
-    }
-
-    private void updateNote() {
-        final ContentValues values = new ContentValues();
-        values.put(NotesContract.TITLE_COLUMN, mTitleTextView.getText().toString());
-        values.put(NotesContract.TEXT_COLUMN, mContentTextView.getText().toString());
-        values.put(NotesContract.TIME_COLUMN, DateUtil.formatCurrentDate());
-        getContentResolver().update(
-                Uri.withAppendedPath(NotesContract.CONTENT_URI, String.valueOf(mId)),
-                values,
-                null,
-                null);
-    }
-
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(
-                this,
-                NotesContract.CONTENT_URI,
-                null,
-                null,
-                null,
-                null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        if (cursor == null || !cursor.moveToFirst()) return;
-        List<Note> dataSource = new ArrayList<>();
-        do {
-            dataSource.add(new Note(cursor));
-        } while (cursor.moveToNext());
-        mViewPagerAdapter.setDataSource(dataSource);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 
     private boolean isNoteUpdatable() {
@@ -211,10 +137,10 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
 
     @Override
     public void onBackPressed() {
-        safetyFinish(() -> EditNoteActivity.super.onBackPressed());
+        safetyFinish(() -> NoteCreateActivity.super.onBackPressed());
     }
 
-    private void safetyFinish(Runnable runnable) {
+    private void safetyFinish(Runnable runnable){
         if(mOriginalText.equals(mContentTextView.getText().toString())
                 && mOriginalTitle.equals(mTitleTextView.getText().toString())){
             runnable.run();

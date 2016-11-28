@@ -11,6 +11,7 @@
         <activity android:name=".activity.NotesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -20,6 +21,8 @@
             android:name=".providers.NotesContentProvider"
             android:authorities="notes.com.example.eudge_000.notes"
             android:exported="false" />
+
+        <activity android:name=".activity.NoteCreateActivity"></activity>
     </application>
 
 </manifest>

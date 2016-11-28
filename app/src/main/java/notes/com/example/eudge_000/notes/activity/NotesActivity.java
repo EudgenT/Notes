@@ -56,7 +56,7 @@ public class NotesActivity extends AppCompatActivity implements LoaderManager.Lo
 
     @OnClick(R.id.fab_button)
     public void onFabBtnClick() {
-        startActivity(EditNoteActivity.newInstance(this));
+        startActivity(NoteCreateActivity.newInstance(this));
     }
 
     @Override
