@@ -32,9 +32,9 @@ public class NoteCreateActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
     @BindView(R.id.title_text_view)
-    public TextView mTitleTextView;
+    protected TextView mTitleTextView;
     @BindView(R.id.edit_note_text_view)
-    public TextView mContentTextView;
+    protected TextView mContentTextView;
 
     @NonNull
     public static Intent newInstance(@NonNull Context context) {

@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tjeannin.provigen.ProviGenBaseContract;
@@ -34,17 +33,16 @@ import notes.com.example.eudge_000.notes.util.DateUtil;
 
 public class EditNoteActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private String mOriginalTitle = "";
-    private String mOriginalText = "";
+//    private String mOriginalTitle = "";
+//    private String mOriginalText = "";
+
+//    TextView mTitleTextView = (TextView) findViewById(R.id.title_text_view);
+//    TextView mContentTextView = (TextView) findViewById(R.id.edit_note_text_view);
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
     @BindView(R.id.view_pager)
     protected ViewPager mViewPager;
-    @BindView(R.id.title_text_view)
-    public TextView mTitleTextView;
-    @BindView(R.id.edit_note_text_view)
-    public TextView mContentTextView;
 
     private long mId = -1;
     private NotesFragmentPagerAdapter mViewPagerAdapter = null;
@@ -78,13 +76,9 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
 
     private void checkIntentByExtraId() {
         Intent intent = getIntent();
-        if (!intent.hasExtra(ProviGenBaseContract._ID)) {
-            return;
-        }
+        if (!intent.hasExtra(ProviGenBaseContract._ID)) return;
         mId = intent.getLongExtra(ProviGenBaseContract._ID, mId);
-        if (mId == -1) {
-            return;
-        }
+        if (mId == -1) return;
         getLoaderManager().initLoader(R.id.edit_note_loader, null, this);
     }
 
@@ -128,14 +122,14 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
     public void share() {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, prepareNoteForSharing());
+       // shareIntent.putExtra(Intent.EXTRA_TEXT, prepareNoteForSharing());
         shareIntent.setType(SHARE_TYPE);
         startActivity(shareIntent);
     }
 
-    private String prepareNoteForSharing() {
-        return getString(R.string.sharing_template, mTitleTextView.getText(), mContentTextView.getText());
-    }
+//    private String prepareNoteForSharing() {
+//        return getString(R.string.sharing_template, mTitleTextView.getText(), mContentTextView.getText());
+//    }
 
     private void deleteNote() {
         if (isNoteUpdatable()) {
@@ -149,8 +143,8 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
 
     private void insertNote() {
         ContentValues values = new ContentValues();
-        values.put(NotesContract.TITLE_COLUMN, mTitleTextView.getText().toString());
-        values.put(NotesContract.TEXT_COLUMN, mContentTextView.getText().toString());
+//        values.put(NotesContract.TITLE_COLUMN, mTitleTextView.getText().toString());
+//        values.put(NotesContract.TEXT_COLUMN, mContentTextView.getText().toString());
         values.put(NotesContract.TIME_COLUMN, DateUtil.formatCurrentDate());
         getContentResolver().insert(NotesContract.CONTENT_URI, values);
     }
@@ -170,8 +164,8 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
 
     private void updateNote() {
         final ContentValues values = new ContentValues();
-        values.put(NotesContract.TITLE_COLUMN, mTitleTextView.getText().toString());
-        values.put(NotesContract.TEXT_COLUMN, mContentTextView.getText().toString());
+//        values.put(NotesContract.TITLE_COLUMN, mTitleTextView.getText().toString());
+//        values.put(NotesContract.TEXT_COLUMN, mContentTextView.getText().toString());
         values.put(NotesContract.TIME_COLUMN, DateUtil.formatCurrentDate());
         getContentResolver().update(
                 Uri.withAppendedPath(NotesContract.CONTENT_URI, String.valueOf(mId)),
@@ -211,15 +205,15 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
 
     @Override
     public void onBackPressed() {
-        safetyFinish(() -> EditNoteActivity.super.onBackPressed());
+        safetyFinish(EditNoteActivity.super::onBackPressed);
     }
 
     private void safetyFinish(Runnable runnable) {
-        if(mOriginalText.equals(mContentTextView.getText().toString())
-                && mOriginalTitle.equals(mTitleTextView.getText().toString())){
-            runnable.run();
-            return;
-        }
+//        if(mOriginalText.equals(mContentTextView.getText().toString())
+//                && mOriginalTitle.equals(mTitleTextView.getText().toString())){
+//            runnable.run();
+//            return;
+//        }
         showDoYouSureAlert(runnable);
     }
 
